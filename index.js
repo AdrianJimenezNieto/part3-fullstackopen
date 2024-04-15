@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
@@ -25,6 +26,14 @@ let persons = [
     number: "39-23-6423122"
   }
 ]
+
+morgan.token('body', (request, response) => {
+  if (request.method === 'POST') {
+    return JSON.stringify(request.body)
+  }
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 // GENERATE ID
 const generateId = () =>{
