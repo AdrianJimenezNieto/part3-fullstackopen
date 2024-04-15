@@ -34,6 +34,11 @@ const generateId = () =>{
   return maxId + 1
 }
 
+// CHECK NAMES
+const checkName = (name) => {
+  return persons.map(person => person.name).includes(name)
+}
+
 // GET ALL ENTRIES
 app.get('/api/persons', (request, response) => {
   response.status(200).json(persons)
@@ -83,9 +88,14 @@ app.post('/api/persons', (request, response) => {
       error: 'name missing'
     })
   }
-  if (!body.number) {
+  else if (!body.number) {
     return response.status(400).json({
       error: 'number missing'
+    })
+  }
+  else if (checkName(body.name)) {
+    return response.status(400).json({
+      error: 'name must be unique'
     })
   }
 
