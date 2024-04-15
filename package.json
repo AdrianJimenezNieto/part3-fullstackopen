@@ -1,0 +1,19 @@
+{
+  "name": "part3",
+  "version": "1.0.0",
+  "description": "Repository for the part 3 exercises of the FullStack Open bootcamp from the University of Helsinki.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adrian",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
