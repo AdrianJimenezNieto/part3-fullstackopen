@@ -16,7 +16,6 @@ const App = () => {
   const [success, setSuccess] = useState(true)
 
   useEffect(() =>{
-    console.log('estoy en effect')
     personService
       .getAll()
       .then(initialPersons => {
@@ -102,14 +101,16 @@ const App = () => {
     if (window.confirm(`Are you sure you want to delete ${deleteItem.name}`)) {
       personService
         .deletePerson(id)
-        .then(returned => setPersons(persons.filter(person => person.id !== returned.id)))
+        .then(returned => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
     }
   }
 
   const namesToShow = showAll
     ? persons
     : persons.filter(person => person.name.toLocaleLowerCase().includes(filter))
-
+  
   return (
     <div>
       <h2>Phonebook</h2>

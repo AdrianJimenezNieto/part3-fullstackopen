@@ -3,6 +3,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 
+app.use(express.static('dist'))
 app.use(cors())
 app.use(express.json())
 
@@ -85,7 +86,7 @@ app.get('/api/persons/:id', (request, response) => {
 // DELETE AN ENTRY
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
-  persons = persons.filter(note => note.id !== id)
+  persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
 })
@@ -122,7 +123,7 @@ app.post('/api/persons', (request, response) => {
 })
 
 // RUNNING THE APP
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
