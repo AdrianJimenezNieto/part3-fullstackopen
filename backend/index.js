@@ -35,26 +35,28 @@ const errorHandler = (error, request, response, next) => {
 }
 
 // ROUTES
-// GET ALL PEOPLE
-app.get('/api/persons', (request, response) => {
-  Person
-    .find({})
-    .then(persons => {
-      response.json(persons)
-    })
-})
 
 // INFO ROUTE
 app.get('/info', (request, response) => {
   const entries = persons.length
   const time = new Date(Date.now())
-
+  
   response.end(
     `
     <p>Phonebook has info for ${entries} people<p>
     <p>${time.toUTCString()}<p>
     `
   )
+})
+
+// GET ALL PEOPLE
+app.get('/api/persons', (request, response, next) => {
+  Person
+    .find({})
+    .then(persons => {
+      response.json(persons)
+    })
+    .catch(error => next(error))
 })
 
 // GET JUST A PERSON
@@ -103,6 +105,23 @@ app.post('/api/persons', (request, response, next) => {
 
   person
     .save()
+    .then(newPerson => {
+      response.json(newPerson)
+    })
+    .catch(error => next(error))
+})
+
+// UPDATE PERSON
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person
+    .findByIdAndUpdate(request.params.id, person, { new: true })
     .then(newPerson => {
       response.json(newPerson)
     })
