@@ -19,6 +19,22 @@ morgan.token('body', (request, response) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+// MIDDLEWARE
+const unkownEndpoint = (request, response) => {
+  response.status(404).end()
+}
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id'})
+  }
+
+  next(error)
+}
+
+// ROUTES
 // GET ALL PEOPLE
 app.get('/api/persons', (request, response) => {
   Person
@@ -28,8 +44,6 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-
-// ROUTES
 // INFO ROUTE
 app.get('/info', (request, response) => {
   const entries = persons.length
@@ -43,22 +57,22 @@ app.get('/info', (request, response) => {
   )
 })
 
-// GET JUST AN ENTRY
-app.get('/api/persons/:id', (request, response) => {
+// GET JUST A PERSON
+app.get('/api/persons/:id', (request, response, next) => {
   Person
     .findById(request.params.id)
     .then(person => {
-      response.json(person)
+      if(person){
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
     })
-    .catch(error => {
-      response.status(404).json({
-        error: 'person not found'
-      })
-    })
+    .catch(error => next(error))
 })
 
-// DELETE AN ENTRY
-app.delete('/api/persons/:id', (request, response) => {
+// DELETE A PERSON
+app.delete('/api/persons/:id', (request, response, next) => {
   Person
     .findByIdAndDelete(request.params.id)
     .then(result => {
@@ -68,7 +82,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 // CREATE AN ENTRY
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name) {
@@ -94,6 +108,10 @@ app.post('/api/persons', (request, response) => {
     })
     .catch(error => next(error))
 })
+
+// MIDDLEWARE CALLS
+app.use(unkownEndpoint)
+app.use(errorHandler)
 
 // RUNNING THE APP
 const PORT = process.env.PORT || 3001
