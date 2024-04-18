@@ -38,15 +38,19 @@ const errorHandler = (error, request, response, next) => {
 
 // INFO ROUTE
 app.get('/info', (request, response) => {
-  const entries = persons.length
-  const time = new Date(Date.now())
-  
-  response.end(
-    `
-    <p>Phonebook has info for ${entries} people<p>
-    <p>${time.toUTCString()}<p>
-    `
-  )
+  Person
+    .find({})
+    .then(persons => {
+      const entries = persons.length
+      const time = new Date(Date.now())
+      response.end(
+        `
+        <p>Phonebook has info for ${entries} people<p>
+        <p>${time.toUTCString()}<p>
+        `
+      )
+    })
+    .catch(error => next(error))
 })
 
 // GET ALL PEOPLE
