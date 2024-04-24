@@ -58,12 +58,10 @@ const App = () => {
         })
         .catch(error => {
           setSuccess(false)
-          setNotificationMessage(`Information ${person.name} has already been removed from server`)
+          setNotificationMessage(error.response.data.error)
           setTimeout(() => {
             setNotificationMessage(null)
-            setSuccess(true)
-          }, 3000);
-          setPersons(persons.map(person => person.id !== id))
+          }, 3000)
         })
     }
   } 
