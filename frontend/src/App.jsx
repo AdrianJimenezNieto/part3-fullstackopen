@@ -49,6 +49,7 @@ const App = () => {
       personService
         .update(person.id, updatePerson)
         .then(returnedPerson => {
+          setSuccess(true)
           setNotificationMessage(`Number of ${returnedPerson.name} changed succesfuly.`)
           console.log(notificationMessage);
           setTimeout(() => {
@@ -83,6 +84,7 @@ const App = () => {
       personService
         .create(personObject)
         .then(returnedPerson => {
+          setSuccess(true)
           setNotificationMessage(`Added ${returnedPerson.name} succesfuly.`)
           setTimeout(() => {
             setNotificationMessage(null)
