@@ -91,6 +91,13 @@ const App = () => {
           }, 3000);
           setPersons(persons.concat(returnedPerson))
         })
+        .catch(error => {
+          setSuccess(false)
+          setNotificationMessage(error.response.data.error)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 3000)
+        })
     }
     setNewName('')
     setNewNumber('')

@@ -12,7 +12,6 @@
 }
 
 .error {
-  color:red;
-  background: lightcoral;
+  color:darkred;
+  background: rgb(239, 155, 155);
 }
-
